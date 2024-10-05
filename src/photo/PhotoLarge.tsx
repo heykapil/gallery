@@ -1,5 +1,29 @@
-"use client";
+'use client';
 
+import AdminPhotoMenuClient from '@/admin/AdminPhotoMenuClient';
+import { cameraFromPhoto } from '@/camera';
+import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';
+import DownloadButton from '@/components/DownloadButton';
+import ShareButton from '@/components/ShareButton';
+import SiteGrid from '@/components/SiteGrid';
+import ImageLarge from '@/components/image/ImageLarge';
+import PhotoFilmSimulation from '@/simulation/PhotoFilmSimulation';
+import {
+  ALLOW_PUBLIC_DOWNLOADS,
+  SHOULD_PREFETCH_ALL_LINKS,
+} from '@/site/config';
+import {
+  pathForFocalLength,
+  pathForPhoto,
+  pathForPhotoShare,
+} from '@/site/paths';
+import { useAppState } from '@/state/AppState';
+import { sortTags } from '@/tag';
+import PhotoTags from '@/tag/PhotoTags';
+import useOnVisible from '@/utility/useOnVisible';
+import { clsx } from 'clsx/lite';
+import Link from 'next/link';
+import { useRef } from 'react';
 import {
   Photo,
   altTextForPhoto,
@@ -7,35 +31,11 @@ import {
   shouldShowCameraDataForPhoto,
   shouldShowExifDataForPhoto,
   titleForPhoto,
-} from ".";
-import SiteGrid from "@/components/SiteGrid";
-import ImageLarge from "@/components/image/ImageLarge";
-import { clsx } from "clsx/lite";
-import Link from "next/link";
-import {
-  pathForFocalLength,
-  pathForPhoto,
-  pathForPhotoShare,
-} from "@/site/paths";
-import PhotoTags from "@/tag/PhotoTags";
-import ShareButton from "@/components/ShareButton";
-import DownloadButton from "@/components/DownloadButton";
-import PhotoCamera from "../camera/PhotoCamera";
-import { cameraFromPhoto } from "@/camera";
-import PhotoFilmSimulation from "@/simulation/PhotoFilmSimulation";
-import { sortTags } from "@/tag";
-import DivDebugBaselineGrid from "@/components/DivDebugBaselineGrid";
-import PhotoLink from "./PhotoLink";
-import {
-  SHOULD_PREFETCH_ALL_LINKS,
-  ALLOW_PUBLIC_DOWNLOADS,
-} from "@/site/config";
-import AdminPhotoMenuClient from "@/admin/AdminPhotoMenuClient";
-import { RevalidatePhoto } from "./InfinitePhotoScroll";
-import { useRef } from "react";
-import useOnVisible from "@/utility/useOnVisible";
-import PhotoDate from "./PhotoDate";
-import { useAppState } from "@/state/AppState";
+} from '.';
+import PhotoCamera from '../camera/PhotoCamera';
+import { RevalidatePhoto } from './InfinitePhotoScroll';
+import PhotoDate from './PhotoDate';
+import PhotoLink from './PhotoLink';
 
 export default function PhotoLarge({
   photo,
@@ -118,19 +118,21 @@ export default function PhotoLarge({
           href={pathForPhoto({ photo })}
           className={clsx(
             arePhotosMatted &&
-              "flex items-center aspect-[3/2] bg-gray-100 dark:bg-gray-950",
+              'flex items-center aspect-[3/2] bg-gray-100 dark:bg-gray-950',
           )}
           prefetch={prefetch}
         >
           <div
             className={clsx(
-              arePhotosMatted && "flex items-center justify-center w-full",
-              arePhotosMatted && photo.aspectRatio >= 1 ? "h-[80%]" : "h-[90%]",
+              arePhotosMatted && 'flex items-center justify-center w-full',
+              arePhotosMatted && photo.aspectRatio >= 1 ? 'h-[80%]' : 'h-[90%]',
             )}
           >
             <ImageLarge
-              className={clsx(arePhotosMatted && "flex h-full")}
-              imgClassName={clsx(arePhotosMatted && "object-contain")}
+              className={clsx(arePhotosMatted && 'h-full')}
+              imgClassName={clsx(
+                arePhotosMatted && 'object-contain w-full h-full',
+              )}
               alt={altTextForPhoto(photo)}
               src={photo.url}
               aspectRatio={photo.aspectRatio}
@@ -144,11 +146,11 @@ export default function PhotoLarge({
       contentSide={
         <DivDebugBaselineGrid
           className={clsx(
-            "relative",
-            "sticky top-4 self-start -translate-y-1",
-            "grid grid-cols-2 md:grid-cols-1",
-            "gap-x-0.5 sm:gap-x-1 gap-y-baseline",
-            "pb-6",
+            'relative',
+            'sticky top-4 self-start -translate-y-1',
+            'grid grid-cols-2 md:grid-cols-1',
+            'gap-x-0.5 sm:gap-x-1 gap-y-baseline',
+            'pb-6',
           )}
         >
           {/* Meta */}
@@ -175,9 +177,9 @@ export default function PhotoLarge({
               {photo.caption && (
                 <div
                   className={clsx(
-                    "uppercase",
+                    'uppercase',
                     // Prevent collision with admin button
-                    isUserSignedIn && "md:pr-7",
+                    isUserSignedIn && 'md:pr-7',
                   )}
                 >
                   {photo.caption}
@@ -206,8 +208,8 @@ export default function PhotoLarge({
           {/* EXIF Data */}
           <div
             className={clsx(
-              "space-y-baseline",
-              !hasTitleContent && "md:-mt-baseline",
+              'space-y-baseline',
+              !hasTitleContent && 'md:-mt-baseline',
             )}
           >
             {showExifContent && (
@@ -224,7 +226,7 @@ export default function PhotoLarge({
                     )}
                     {photo.focalLengthIn35MmFormatFormatted && (
                       <>
-                        {" "}
+                        {' '}
                         <span
                           title="35mm equivalent"
                           className="text-extra-dim"
@@ -237,7 +239,7 @@ export default function PhotoLarge({
                   <li>{photo.fNumberFormatted}</li>
                   <li>{photo.exposureTimeFormatted}</li>
                   <li>{photo.isoFormatted}</li>
-                  <li>{photo.exposureCompensationFormatted ?? "0ev"}</li>
+                  <li>{photo.exposureCompensationFormatted ?? '0ev'}</li>
                 </ul>
                 {showSimulation && photo.filmSimulation && (
                   <PhotoFilmSimulation
@@ -249,25 +251,25 @@ export default function PhotoLarge({
             )}
             <div
               className={clsx(
-                "flex gap-x-2.5 gap-y-baseline",
-                ALLOW_PUBLIC_DOWNLOADS ? "flex-col" : "md:flex-col",
-                "md:justify-normal",
+                'flex gap-x-2.5 gap-y-baseline',
+                ALLOW_PUBLIC_DOWNLOADS ? 'flex-col' : 'md:flex-col',
+                'md:justify-normal',
               )}
             >
               <PhotoDate
                 photo={photo}
                 className={clsx(
-                  "text-medium",
+                  'text-medium',
                   // Prevent collision with admin button
-                  !hasNonDateContent && isUserSignedIn && "md:pr-7",
+                  !hasNonDateContent && isUserSignedIn && 'md:pr-7',
                 )}
               />
               <div
                 className={clsx(
-                  "flex gap-1 translate-y-[0.5px]",
+                  'flex gap-1 translate-y-[0.5px]',
                   ALLOW_PUBLIC_DOWNLOADS
-                    ? "translate-x-[-2.5px]"
-                    : "md:translate-x-[-2.5px]",
+                    ? 'translate-x-[-2.5px]'
+                    : 'md:translate-x-[-2.5px]',
                 )}
               >
                 {shouldShare && (
@@ -291,7 +293,7 @@ export default function PhotoLarge({
                 )}
                 {ALLOW_PUBLIC_DOWNLOADS && (
                   <DownloadButton
-                    className={clsx("translate-y-[0.5px] md:translate-y-0")}
+                    className={clsx('translate-y-[0.5px] md:translate-y-0')}
                     photo={photo}
                   />
                 )}

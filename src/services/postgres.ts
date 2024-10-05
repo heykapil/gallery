@@ -1,5 +1,5 @@
-import { POSTGRES_SSL_ENABLED } from "@/site/config";
-import { Pool, QueryResult, QueryResultRow } from "pg";
+import { POSTGRES_SSL_ENABLED } from '@/site/config';
+import { Pool, QueryResult, QueryResultRow } from 'pg';
 
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
@@ -58,13 +58,13 @@ export const sql = <T extends QueryResultRow>(
   ...values: Primitive[]
 ) => {
   if (!isTemplateStringsArray(strings) || !Array.isArray(values)) {
-    throw new Error("Invalid template literal argument");
+    throw new Error('Invalid template literal argument');
   }
 
-  let result = strings[0] ?? "";
+  let result = strings[0] ?? '';
 
   for (let i = 1; i < strings.length; i++) {
-    result += `$${i}${strings[i] ?? ""}`;
+    result += `$${i}${strings[i] ?? ''}`;
   }
 
   return query<T>(result, values);
@@ -72,23 +72,23 @@ export const sql = <T extends QueryResultRow>(
 
 export const convertArrayToPostgresString = (
   array?: string[],
-  type: "braces" | "brackets" | "parentheses" = "braces",
+  type: 'braces' | 'brackets' | 'parentheses' = 'braces',
 ) =>
   array
-    ? type === "braces"
-      ? `{${array.join(",")}}`
-      : type === "brackets"
-        ? `[${array.map((i) => `'${i}'`).join(",")}]`
-        : `(${array.map((i) => `'${i}'`).join(",")})`
+    ? type === 'braces'
+      ? `{${array.join(',')}}`
+      : type === 'brackets'
+        ? `[${array.map((i) => `'${i}'`).join(',')}]`
+        : `(${array.map((i) => `'${i}'`).join(',')})`
     : null;
 
 const isTemplateStringsArray = (
   strings: unknown,
 ): strings is TemplateStringsArray => {
   return (
-    Array.isArray(strings) && "raw" in strings && Array.isArray(strings.raw)
+    Array.isArray(strings) && 'raw' in strings && Array.isArray(strings.raw)
   );
 };
 
 export const testDatabaseConnection = async () =>
-  query("SELECt COUNT(*) FROM pg_stat_user_tables");
+  query('SELECt COUNT(*) FROM pg_stat_user_tables');
