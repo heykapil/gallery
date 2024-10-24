@@ -11,11 +11,11 @@ import { TAG_FAVS, Tags } from '@/tag';
 import { usePathname } from 'next/navigation';
 import { PATH_GRID_INFERRED } from '@/site/paths';
 import PhotoTagFieldset from './PhotoTagFieldset';
-import { tagMultiplePhotosAction } from '@/photo/actions';
+import { tagMultiplePhotosAction, hideMultiplePhotosAction } from '@/photo/actions';
 import { toastSuccess } from '@/toast';
 import DeletePhotosButton from './DeletePhotosButton';
 import { photoQuantityText } from '@/photo';
-import { FaArrowDown, FaCheck, FaRegStar } from 'react-icons/fa6';
+import { FaArrowDown, FaCheck, FaRegStar, FaEyeSlash } from 'react-icons/fa6';
 import ResponsiveText from '@/components/primitives/ResponsiveText';
 
 export default function AdminBatchEditPanelClient({
@@ -111,6 +111,20 @@ export default function AdminBatchEditPanelClient({
             onClick={() => setIsPerformingSelectEdit?.(true)}
             onDelete={resetForm}
             onFinish={() => setIsPerformingSelectEdit?.(false)}
+          />
+          <LoaderButton
+            icon={<FaEyeSlash />}
+            disabled={isPerformingSelectEdit}
+            confirmText={`Are you sure you want to hide ${photosText}?`}
+            onClick={() => {
+              setIsPerformingSelectEdit?.(true);
+              hideMultiplePhotosAction(selectedPhotoIds ?? [])
+                .then(() => {
+                  toastSuccess(`${photosText} hidden`);
+                  resetForm();
+                })
+                .finally(() => setIsPerformingSelectEdit?.(false));
+            }}
           />
           <LoaderButton
             icon={<FaRegStar />}
