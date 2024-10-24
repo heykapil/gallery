@@ -9,6 +9,7 @@ import {
   getPhoto,
   getPhotos,
   addTagsToPhotos,
+  hideMultiPhotos,
 } from '@/photo/db/query';
 import { GetPhotosOptions, areOptionsSensitive } from './db';
 import {
@@ -212,6 +213,16 @@ export const tagMultiplePhotosAction = (
   runAuthenticatedAdminServerAction(async () => {
     await addTagsToPhotos(
       convertStringToArray(tags, false) ?? [],
+      photoIds,
+    );
+    revalidateAllKeysAndPaths();
+  });
+
+export const hideMultiplePhotosAction = (
+  photoIds: string[],
+) =>
+  runAuthenticatedAdminServerAction(async () => {
+    await hideMultiPhotos(
       photoIds,
     );
     revalidateAllKeysAndPaths();
