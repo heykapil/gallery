@@ -261,6 +261,16 @@ export const addTagsToPhotos = (tags: string[], photoIds: string[]) =>
     convertArrayToPostgresString(photoIds),
   ]), 'addTagsToPhotos');
 
+export const hideMultiPhotos = (photoIds: string[]) =>
+  safelyQueryPhotos(() => query(`
+    UPDATE photos 
+    SET hidden = true
+    WHERE id = ANY($2)
+  `, [
+    convertArrayToPostgresString(photoIds),
+  ]), 'hideMultiPhotos');
+
+
 export const deletePhoto = (id: string) =>
   safelyQueryPhotos(() => sql`
     DELETE FROM photos WHERE id=${id}
