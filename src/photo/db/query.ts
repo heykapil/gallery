@@ -265,7 +265,7 @@ export const hideMultiPhotos = (photoIds: string[]) =>
   safelyQueryPhotos(() => query(`
     UPDATE photos 
     SET hidden = true
-    WHERE id = ANY($2)
+    WHERE id = ANY($1)
   `, [
     convertArrayToPostgresString(photoIds),
   ]), 'hideMultiPhotos');
